@@ -2,11 +2,11 @@
 
 ## Slide 1: Title Slide
 **3D Ecosystem Simulation**
-*Interactive Predator-Prey Dynamics in Real-Time 3D*
+*Interactive Predator-Prey Dynamics*
 
+- Master's Project in Computer Science
 - Built with React, Three.js, and TypeScript
-- Real-time biological simulation
-- Advanced 3D graphics and AI behaviors
+- Real-time 3D biological simulation
 
 ---
 
@@ -15,203 +15,168 @@
 
 🌍 **Interactive 3D Environment**
 - Real-time predator-prey simulation
-- Gender-based reproduction system
-- Energy-driven survival mechanics
+- Rabbits and foxes with realistic behaviors
+- Energy-based survival mechanics
 
-🎮 **Key Features**
-- Live population tracking
-- Interactive controls
-- Realistic animal behaviors
-- Statistical analysis
+🎯 **Project Goals**
+- Demonstrate 3D graphics programming
+- Implement AI behavioral systems
+- Apply mathematical modeling concepts
 
 ---
 
 ## Slide 3: Technology Stack
 **Modern Web Technologies**
 
-**Frontend Framework**
+**Core Technologies**
 - React 18 with TypeScript
-- Component-based architecture
-- Real-time state management
-
-**3D Graphics Engine**
 - Three.js for 3D rendering
-- React Three Fiber integration
-- Advanced lighting and shadows
+- Zustand for state management
 
-**State Management**
-- Zustand for global state
-- Efficient updates and re-rendering
+**Key Libraries**
+- React Three Fiber (3D integration)
+- Tailwind CSS (styling)
+- Lucide React (icons)
 
----
-
-## Slide 4: Core Concepts - Predator-Prey Dynamics
-**Biological Simulation Model**
-
-**Energy System**
-- Rabbits: Regenerate energy (+3/sec) from grazing
-- Foxes: Consume energy (-2.5/sec), gain from hunting (+60/catch)
-
-**Population Dynamics**
-- Birth rates depend on energy and age
-- Gender-based reproduction (male + female required)
-- Natural death from energy depletion
-
-**Behavioral AI**
-- Rabbits flee from predators
-- Foxes actively hunt prey
-- Mating behaviors and pregnancy cycles
+**Why These Choices?**
+- Industry-standard tools
+- Strong TypeScript support
+- Excellent performance
 
 ---
 
-## Slide 5: 3D Graphics Implementation
-**Advanced Visual Systems**
+## Slide 4: System Architecture
+**Component-Based Design**
 
-**3D Model Construction**
-- Procedural geometry generation
-- Gender-specific visual differences
-- Real-time animations and movements
-
-**Visual Feedback**
-- Energy bars above each animal
-- Color-coded gender indicators
-- Pregnancy status visualization
-- Dynamic material properties
-
-**Rendering Features**
-- Real-time shadows and lighting
-- Fog effects for depth
-- Smooth camera controls
-
----
-
-## Slide 6: Physics & Collision Systems
-**Realistic Movement & Interactions**
-
-**Movement Physics**
-- Velocity-based locomotion
-- Steering behaviors (seek, flee, wander)
-- Boundary constraints (circular world)
-
-**Collision Detection**
-- Distance-based proximity checks
-- Efficient nearest neighbor search
-- Hunting and mating interactions
-
-**Spatial Optimization**
-- Grid-based spatial partitioning
-- Distance culling for performance
-- Bounding sphere collision volumes
-
----
-
-## Slide 7: AI & Behavioral Systems
-**Intelligent Agent Behaviors**
-
-**Finite State Machines**
 ```
-Rabbit States: GRAZING → FLEEING → MATING → PREGNANT
-Fox States: WANDERING → HUNTING → MATING → PREGNANT
-```
-
-**Decision Making**
-- Priority-based behavior selection
-- Environmental awareness
-- Survival instincts and reproduction drives
-
-**Advanced Behaviors**
-- Predator avoidance algorithms
-- Hunting strategies and pursuit
-- Mate selection and courtship
-
----
-
-## Slide 8: Technical Architecture
-**System Design & Data Flow**
-
-**Component Hierarchy**
-```
-App
+App (Root)
 ├── Simulation (3D Canvas)
 │   ├── Ground (Environment)
-│   ├── Agents (Animal Management)
+│   ├── Agents (Animals)
 │   │   ├── Rabbit Components
 │   │   └── Fox Components
-├── Controls (UI Interface)
-└── Stats (Analytics Dashboard)
+├── Controls (User Interface)
+└── Stats (Data Display)
 ```
 
 **Data Flow**
-- Unidirectional state updates
-- Frame-based animation loop (60fps)
+- Centralized state management
+- 60fps animation loop
 - Event-driven user interactions
 
 ---
 
-## Slide 9: Performance Optimization
-**Scalability & Efficiency**
+## Slide 5: Core Algorithms - Predator-Prey Model
+**Mathematical Foundation**
 
-**Rendering Optimizations**
-- Level of Detail (LOD) systems
-- Frustum culling for off-screen objects
-- Efficient material and geometry reuse
+**Energy System**
+```
+Rabbits: +3 energy/sec (grazing) - 0.8 energy/sec (living)
+Foxes: +60 energy/hunt - 2.5 energy/sec (living)
+```
 
-**Algorithm Optimizations**
-- Spatial data structures for collision detection
-- Variable update frequencies
-- Selective rendering based on visibility
+**Population Dynamics**
+```
+dR/dt = births - deaths - predation
+dF/dt = hunting_success - deaths
+```
 
-**Memory Management**
-- Object pooling for frequent allocations
-- Garbage collection optimization
-- Efficient state updates
-
----
-
-## Slide 10: User Interface Design
-**Intuitive Control Systems**
-
-**Design Philosophy**
-- Minimalist, non-intrusive interface
-- Real-time feedback and statistics
-- Responsive design for all devices
-
-**Control Features**
-- Play/Pause simulation
-- Speed adjustment (0.1x to 3.0x)
-- Add animals dynamically
-- Toggle visual elements
-- Reset simulation
-
-**Statistics Dashboard**
-- Live population counts
-- Gender distribution
-- Pregnancy tracking
-- Simulation time
+**Key Features**
+- Gender-based reproduction
+- Energy-driven survival
+- Balanced ecosystem parameters
 
 ---
 
-## Slide 11: Key Algorithms - Collision Detection
+## Slide 6: 3D Graphics Implementation
+**Three.js Integration**
+
+**3D Models**
+- Procedural geometry generation
+- Rabbits: Capsule body + sphere head + ears
+- Foxes: Larger body + snout + triangular ears
+
+**Visual Features**
+- Real-time shadows and lighting
+- Energy bars above each animal
+- Gender indicators (blue/pink spheres)
+- Pregnancy status visualization
+
+**Rendering Performance**
+- 60 FPS with 50+ animals
+- Optimized materials and geometry
+
+---
+
+## Slide 7: Physics & Collision Detection
+**Movement & Interaction Systems**
+
+**Movement Physics**
+```typescript
+// Basic velocity-based movement
+newPosition = currentPosition + velocity * deltaTime
+
+// Boundary constraints (circular world)
+if (distanceFromCenter > worldSize) {
+  pushTowardsCenter();
+}
+```
+
+**Collision Detection**
+- Distance-based proximity checks
+- Hunting: Fox catches rabbit (< 1.2 units)
+- Mating: Same species, opposite gender (< 2.0 units)
+- Optimized with distance-squared calculations
+
+---
+
+## Slide 8: AI Behavioral Systems
+**State-Based Animal Intelligence**
+
+**Rabbit Behavior States**
+```
+GRAZING → FLEEING → MATING → PREGNANT
+```
+
+**Fox Behavior States**
+```
+WANDERING → HUNTING → MATING → PREGNANT
+```
+
+**Decision Making**
+```typescript
+if (predatorNearby && distance < 6) {
+  return FLEE_STATE;
+} else if (mateAvailable && canReproduce) {
+  return MATE_STATE;
+} else {
+  return DEFAULT_STATE;
+}
+```
+
+---
+
+## Slide 9: Key Implementation - Collision Detection
 **Efficient Spatial Calculations**
 
 ```typescript
-// Distance-based collision detection
-const distanceSquared = (a: Vector3, b: Vector3): number => {
+// Optimized distance calculation (avoid sqrt)
+const distanceSquared = (a, b) => {
   const dx = a.x - b.x;
   const dz = a.z - b.z;
   return dx * dx + dz * dz;
 };
 
-// Nearest neighbor search
-const findClosestPrey = (predator: Agent, preyList: Agent[]) => {
+// Find closest prey for hunting
+const findClosestRabbit = (fox, rabbits) => {
   let closest = null;
   let minDistance = Infinity;
   
-  for (const prey of preyList) {
-    const distance = distanceSquared(predator.position, prey.position);
+  for (const rabbit of rabbits) {
+    const distance = distanceSquared(fox.position, rabbit.position);
     if (distance < minDistance) {
       minDistance = distance;
-      closest = prey;
+      closest = rabbit;
     }
   }
   return closest;
@@ -220,204 +185,256 @@ const findClosestPrey = (predator: Agent, preyList: Agent[]) => {
 
 ---
 
-## Slide 12: Key Algorithms - Reproduction System
-**Gender-Based Breeding Mechanics**
+## Slide 10: Reproduction System
+**Gender-Based Population Growth**
 
 **Mating Requirements**
-- Male and female of same species
-- Minimum energy levels (60+ for rabbits, 75+ for foxes)
-- Minimum age and reproduction cooldown
-- Proximity requirement (within 2.0 units)
+- Male + Female of same species
+- Minimum energy levels (60+ rabbits, 75+ foxes)
+- Proximity requirement (< 2.0 units)
+- Reproduction cooldown period
 
 **Pregnancy & Birth**
-- Gestation periods (8 sec rabbits, 15 sec foxes)
-- Litter sizes (2-4 rabbits, 1-2 foxes)
+- Gestation: 8 seconds (rabbits), 15 seconds (foxes)
+- Litter sizes: 2-4 rabbits, 1-2 foxes
 - Energy costs for pregnancy and birth
-- Offspring inherit random gender
+- Random gender assignment for offspring
 
 ---
 
-## Slide 13: Mathematical Models
-**Scientific Foundation**
+## Slide 11: State Management
+**Zustand Store Architecture**
 
-**Energy Balance Equations**
+```typescript
+interface SimulationState {
+  rabbits: AgentType[];
+  foxes: AgentType[];
+  isPaused: boolean;
+  speedFactor: number;
+  simulationTime: number;
+  
+  // Actions
+  togglePause: () => void;
+  updateAgents: (deltaTime: number) => void;
+  addRabbit: () => void;
+  addFox: () => void;
+}
 ```
-dE/dt = -consumption_rate + energy_gain - reproduction_cost
 
-Rabbits: dE/dt = -0.8 + 3.0 - pregnancy_cost
-Foxes: dE/dt = -2.5 + hunt_success - pregnancy_cost
-```
-
-**Population Dynamics (Modified Lotka-Volterra)**
-```
-dR/dt = birth_rate × R - death_rate × R - predation_rate × R × F
-dF/dt = efficiency × predation_rate × R × F - death_rate × F
-```
-
-Where R = Rabbit population, F = Fox population
+**Benefits**
+- Centralized state management
+- Immutable updates
+- TypeScript integration
 
 ---
 
-## Slide 14: Real-World Applications
-**Educational & Research Value**
+## Slide 12: User Interface Design
+**Interactive Control System**
 
-**Educational Benefits**
-- Visualize complex ecological concepts
-- Interactive learning experience
-- Real-time parameter experimentation
+**Control Features**
+- Play/Pause simulation
+- Speed adjustment (0.1x - 3.0x)
+- Add animals dynamically
+- Reset simulation
+- Toggle statistics display
 
-**Research Applications**
-- Population dynamics modeling
-- Behavioral pattern analysis
-- Ecosystem balance studies
+**Statistics Dashboard**
+- Live population counts
+- Gender distribution
+- Pregnancy tracking
+- Simulation time display
 
-**Future Extensions**
-- Environmental factors (weather, seasons)
-- Genetic algorithms and evolution
-- Disease spread simulation
-- Migration patterns
+**Design Principles**
+- Clean, minimal interface
+- Real-time feedback
+- Responsive design
 
 ---
 
-## Slide 15: Technical Challenges & Solutions
+## Slide 13: Performance Optimization
+**Efficient Real-Time Simulation**
+
+**Optimization Techniques**
+- Distance-squared calculations (avoid expensive sqrt)
+- Selective updates for active agents
+- Efficient collision detection algorithms
+- Memory management and object reuse
+
+**Performance Metrics**
+- Target: 60 FPS with 50+ animals
+- Memory usage: <100MB
+- Update time: <16ms per frame
+
+**Scalability Considerations**
+- Spatial data structures for larger populations
+- Level-of-detail systems
+- Instanced rendering for future enhancements
+
+---
+
+## Slide 14: Technical Challenges & Solutions
 **Problem-Solving Approach**
 
-**Challenge: Performance with Large Populations**
-- Solution: Spatial partitioning and LOD systems
-- Result: Smooth 60fps with 100+ agents
+**Challenge 1: Performance**
+- Problem: Frame drops with many animals
+- Solution: Optimized collision detection and selective updates
 
-**Challenge: Realistic Animal Behaviors**
-- Solution: Finite state machines and priority systems
-- Result: Believable predator-prey interactions
+**Challenge 2: Realistic Behavior**
+- Problem: Simple random movement looks artificial
+- Solution: State-based AI with priority systems
 
-**Challenge: Balanced Ecosystem**
+**Challenge 3: Ecosystem Balance**
+- Problem: Populations become extinct or explode
 - Solution: Careful parameter tuning and energy systems
-- Result: Sustainable population dynamics
 
 ---
 
-## Slide 16: Code Quality & Architecture
-**Professional Development Practices**
+## Slide 15: Code Quality & Best Practices
+**Professional Development Standards**
 
 **TypeScript Integration**
 - Strong typing for all components
 - Interface definitions for data structures
 - Compile-time error detection
 
-**Modular Architecture**
-- Separation of concerns
-- Reusable components
-- Clean code principles
+**Architecture Principles**
+- Component separation of concerns
+- Reusable, modular design
+- Clean code practices
 
-**State Management**
-- Centralized state with Zustand
-- Immutable updates
-- Predictable data flow
-
----
-
-## Slide 17: Future Enhancements
-**Roadmap for Development**
-
-**Advanced Features**
-- Genetic algorithms for trait evolution
-- Machine learning for adaptive behaviors
-- Environmental factors (weather, disease)
-- Multiplayer collaborative simulation
-
-**Technical Improvements**
-- WebGL2 advanced rendering
-- Web Workers for parallel computation
-- WebAssembly for performance-critical calculations
-- Cloud synchronization and data persistence
+**Testing & Validation**
+- Parameter validation
+- Boundary condition testing
+- Performance monitoring
 
 ---
 
-## Slide 18: Performance Metrics
-**Optimization Results**
+## Slide 16: Mathematical Concepts Applied
+**Academic Foundation**
 
-**Rendering Performance**
-- 60 FPS with 50+ animals
-- <16ms frame time consistently
-- Efficient memory usage (<100MB)
+**Vector Mathematics**
+- 3D position and velocity calculations
+- Normalization and distance functions
+- Rotation and transformation matrices
 
-**Simulation Accuracy**
-- Real-time physics calculations
-- Accurate collision detection
-- Stable population dynamics
+**Physics Simulation**
+- Velocity-based movement
+- Collision detection algorithms
+- Boundary constraint systems
 
-**User Experience**
-- <100ms interaction response time
-- Smooth camera controls
-- Responsive UI across devices
+**Population Dynamics**
+- Modified Lotka-Volterra equations
+- Energy balance modeling
+- Stochastic reproduction events
 
 ---
 
-## Slide 19: Learning Outcomes
+## Slide 17: Learning Outcomes
 **Skills Demonstrated**
 
 **Computer Graphics**
 - 3D scene management
-- Real-time rendering techniques
-- Animation and visual effects
-
-**Artificial Intelligence**
-- Behavioral modeling
-- State machines
-- Decision trees
+- Real-time rendering
+- Material and lighting systems
 
 **Software Engineering**
 - Component architecture
-- State management
+- State management patterns
 - Performance optimization
 
-**Mathematics & Physics**
+**Artificial Intelligence**
+- Behavioral state machines
+- Decision tree implementation
+- Agent-based modeling
+
+**Mathematics**
 - Vector calculations
-- Collision detection
-- Population dynamics modeling
+- Population dynamics
+- Statistical modeling
+
+---
+
+## Slide 18: Future Enhancements
+**Potential Improvements**
+
+**Advanced Features**
+- Environmental factors (weather, seasons)
+- Genetic algorithms for trait evolution
+- Machine learning behaviors
+- Disease spread simulation
+
+**Technical Upgrades**
+- WebGL2 advanced rendering
+- Web Workers for parallel computation
+- Spatial data structures (quadtrees)
+- Larger population support
+
+**Educational Extensions**
+- Parameter experimentation tools
+- Data export and analysis
+- Guided learning scenarios
+
+---
+
+## Slide 19: Project Impact & Applications
+**Real-World Relevance**
+
+**Educational Value**
+- Interactive biology concepts
+- Programming technique demonstration
+- Mathematical modeling visualization
+
+**Research Applications**
+- Population dynamics studies
+- Behavioral pattern analysis
+- Ecosystem balance research
+
+**Technical Demonstration**
+- Modern web development capabilities
+- 3D graphics programming
+- Real-time simulation techniques
 
 ---
 
 ## Slide 20: Conclusion
-**Project Impact & Value**
+**Project Summary**
 
 **Technical Achievement**
-- Complex simulation in web browser
-- Real-time 3D graphics with smooth performance
+- Successfully integrated multiple CS disciplines
+- Real-time 3D simulation in web browser
 - Sophisticated AI behaviors and interactions
 
-**Educational Value**
-- Interactive learning tool for biology concepts
-- Demonstrates software engineering principles
-- Showcases modern web development capabilities
+**Academic Value**
+- Demonstrates master's level programming skills
+- Applies theoretical concepts practically
+- Shows understanding of complex systems
 
 **Future Potential**
-- Foundation for advanced ecological simulations
-- Platform for research and education
-- Extensible architecture for new features
+- Foundation for advanced research
+- Educational tool development
+- Platform for further enhancements
 
-**Thank You - Questions?**
+**Questions & Discussion**
 
 ---
 
 ## Presentation Notes
 
-### Slide Timing (20 minutes total)
+### Timing (15-20 minutes)
 - Slides 1-3: Introduction (3 minutes)
-- Slides 4-7: Core Concepts (6 minutes)
-- Slides 8-12: Technical Implementation (6 minutes)
-- Slides 13-17: Advanced Topics (4 minutes)
-- Slides 18-20: Conclusion (1 minute)
+- Slides 4-8: Technical Overview (6 minutes)
+- Slides 9-13: Implementation Details (6 minutes)
+- Slides 14-20: Analysis & Conclusion (4 minutes)
 
-### Key Talking Points
-1. **Emphasize Real-time Nature**: Highlight 60fps performance
-2. **Biological Accuracy**: Explain realistic predator-prey dynamics
-3. **Technical Complexity**: Show sophisticated algorithms
-4. **Educational Value**: Demonstrate learning applications
-5. **Future Potential**: Discuss extensibility and research value
+### Key Points to Emphasize
+1. **Technical Competency**: Show understanding of 3D graphics and AI
+2. **Mathematical Foundation**: Highlight applied mathematics
+3. **Software Engineering**: Demonstrate clean architecture
+4. **Problem Solving**: Show analytical thinking
+5. **Academic Level**: Appropriate complexity for master's project
 
 ### Demo Suggestions
 - Live simulation during presentation
-- Show different scenarios (population growth, extinction)
+- Show different population scenarios
 - Demonstrate user controls
-- Highlight visual features (energy bars, gender indicators)
+- Highlight visual features (energy bars, behaviors)

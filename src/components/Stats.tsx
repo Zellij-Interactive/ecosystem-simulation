@@ -20,38 +20,17 @@ const Stats: React.FC = () => {
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
-  // Calculate time of day
-  const getTimeOfDay = (timeInSeconds: number) => {
-    const dayDuration = 60; // 60 seconds = 1 full day
-    const timeOfDay = (timeInSeconds % dayDuration) / dayDuration;
-    
-    if (timeOfDay < 0.2 || timeOfDay > 0.8) {
-      return '🌙 Night';
-    } else if (timeOfDay < 0.25 || timeOfDay > 0.75) {
-      return '🌅 Dawn/Dusk';
-    } else if (timeOfDay >= 0.4 && timeOfDay <= 0.6) {
-      return '☀️ Noon';
-    } else {
-      return '🌞 Day';
-    }
-  };
-
   return (
     <div className="bg-black bg-opacity-40 backdrop-blur-md p-4 rounded-lg text-white">
       <h2 className="text-lg font-semibold mb-3">Ecosystem Statistics</h2>
       
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div className="flex flex-col">
-          <span className="text-sm text-gray-300">Time</span>
+          <span className="text-sm text-gray-300">Simulation Time</span>
           <span className="text-xl">{formatTime(simulationTime)}</span>
         </div>
         
         <div className="flex flex-col">
-          <span className="text-sm text-gray-300">Time of Day</span>
-          <span className="text-lg">{getTimeOfDay(simulationTime)}</span>
-        </div>
-        
-        <div className="flex flex-col col-span-2">
           <span className="text-sm text-gray-300">Total Population</span>
           <span className="text-xl">{rabbits.length + foxes.length}</span>
         </div>

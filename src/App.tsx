@@ -2,6 +2,7 @@ import React from 'react';
 import Simulation from './components/Simulation';
 import Controls from './components/Controls';
 import Stats from './components/Stats';
+import AnimalInfoPanel from './components/AnimalInfoPanel';
 
 function App() {
   return (
@@ -19,6 +20,9 @@ function App() {
           <Controls />
         </div>
       </div>
+      
+      {/* Animal Information Panel */}
+      <AnimalInfoPanel />
     </div>
   );
 }

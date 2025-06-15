@@ -26,12 +26,14 @@ export interface SimulationState {
   showGrid: boolean;
   worldSize: number;
   simulationTime: number;
+  selectedAnimal: AgentType | null;
   
   // Actions
   togglePause: () => void;
   setSpeedFactor: (speed: number) => void;
   toggleStats: () => void;
   toggleGrid: () => void;
+  setSelectedAnimal: (animal: AgentType | null) => void;
   addRabbit: () => void;
   addFox: () => void;
   updateAgents: (deltaTime: number) => void;

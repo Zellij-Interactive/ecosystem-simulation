@@ -1,7 +1,8 @@
 import React, { useRef, useMemo } from 'react';
-import { useFrame } from '@react-three/fiber';
+import { useFrame, ThreeEvent } from '@react-three/fiber';
 import * as THREE from 'three';
 import { AgentType } from '../models/types';
+import { useSimulationStore } from '../store/simulationStore';
 
 interface FoxProps {
   fox: AgentType;
@@ -11,6 +12,10 @@ interface FoxProps {
 const Fox: React.FC<FoxProps> = ({ fox, worldSize }) => {
   const foxRef = useRef<THREE.Group>(null);
   const energyBarRef = useRef<THREE.Mesh>(null);
+  const { setSelectedAnimal, selectedAnimal } = useSimulationStore();
+  
+  // Check if this fox is selected
+  const isSelected = selectedAnimal?.id === fox.id;
   
   // Energy bar scale based on current energy
   const energyBarScale = useMemo(() => {
@@ -24,6 +29,13 @@ const Fox: React.FC<FoxProps> = ({ fox, worldSize }) => {
   // Color variations based on gender
   const foxColor = fox.gender === 'male' ? '#e05d00' : '#d95a00';
   const snoutColor = fox.gender === 'male' ? '#d95a00' : '#c54a00';
+
+  // Handle click to select animal
+  const handleClick = (event: ThreeEvent<MouseEvent>) => {
+    event.stopPropagation();
+    console.log('Fox clicked:', fox.id);
+    setSelectedAnimal(fox);
+  };
 
   // Update position and rotation for the fox model
   useFrame(() => {
@@ -62,8 +74,26 @@ const Fox: React.FC<FoxProps> = ({ fox, worldSize }) => {
 
   return (
     <group ref={foxRef}>
+      {/* Selection indicator */}
+      {isSelected && (
+        <mesh position={[0, 0.05, 0]}>
+          <ringGeometry args={[1.0, 1.2, 32]} />
+          <meshBasicMaterial color="#ff6600" transparent opacity={0.6} />
+        </mesh>
+      )}
+      
+      {/* Clickable invisible sphere for better click detection */}
+      <mesh 
+        position={[0, 0.4, 0]} 
+        onClick={handleClick}
+        visible={false}
+      >
+        <sphereGeometry args={[0.8, 8, 8]} />
+        <meshBasicMaterial transparent opacity={0} />
+      </mesh>
+      
       {/* Fox body */}
-      <group>
+      <group onClick={handleClick}>
         {/* Body - slightly larger if pregnant */}
         <mesh castShadow receiveShadow>
           <capsuleGeometry args={[
@@ -71,19 +101,31 @@ const Fox: React.FC<FoxProps> = ({ fox, worldSize }) => {
             fox.isPregnant ? 0.7 : 0.6, 
             8, 16
           ]} />
-          <meshStandardMaterial color={foxColor} />
+          <meshStandardMaterial 
+            color={isSelected ? '#ff7700' : foxColor}
+            emissive={isSelected ? '#440000' : '#000000'}
+            emissiveIntensity={isSelected ? 0.2 : 0}
+          />
         </mesh>
         
         {/* Head */}
         <mesh position={[0, 0.3, 0.4]} castShadow>
           <sphereGeometry args={[0.2, 16, 16]} />
-          <meshStandardMaterial color={foxColor} />
+          <meshStandardMaterial 
+            color={isSelected ? '#ff7700' : foxColor}
+            emissive={isSelected ? '#440000' : '#000000'}
+            emissiveIntensity={isSelected ? 0.2 : 0}
+          />
         </mesh>
         
         {/* Snout */}
         <mesh position={[0, 0.25, 0.6]} castShadow>
           <coneGeometry args={[0.12, 0.3, 16]} rotation={[Math.PI/2, 0, 0]} />
-          <meshStandardMaterial color={snoutColor} />
+          <meshStandardMaterial 
+            color={isSelected ? '#ff6600' : snoutColor}
+            emissive={isSelected ? '#440000' : '#000000'}
+            emissiveIntensity={isSelected ? 0.1 : 0}
+          />
         </mesh>
         
         {/* Ears - different sizes for male/female */}
@@ -94,7 +136,11 @@ const Fox: React.FC<FoxProps> = ({ fox, worldSize }) => {
               fox.gender === 'male' ? 0.22 : 0.2, 
               8
             ]} />
-            <meshStandardMaterial color={foxColor} />
+            <meshStandardMaterial 
+              color={isSelected ? '#ff7700' : foxColor}
+              emissive={isSelected ? '#440000' : '#000000'}
+              emissiveIntensity={isSelected ? 0.1 : 0}
+            />
           </mesh>
           <mesh position={[0.15, 0.1, 0]} rotation={[0, 0, 0.2]} castShadow>
             <coneGeometry args={[
@@ -102,7 +148,11 @@ const Fox: React.FC<FoxProps> = ({ fox, worldSize }) => {
               fox.gender === 'male' ? 0.22 : 0.2, 
               8
             ]} />
-            <meshStandardMaterial color={foxColor} />
+            <meshStandardMaterial 
+              color={isSelected ? '#ff7700' : foxColor}
+              emissive={isSelected ? '#440000' : '#000000'}
+              emissiveIntensity={isSelected ? 0.1 : 0}
+            />
           </mesh>
         </group>
         
@@ -121,7 +171,11 @@ const Fox: React.FC<FoxProps> = ({ fox, worldSize }) => {
         {/* Tail */}
         <mesh position={[0, 0.1, -0.4]} rotation={[0.3, 0, 0]} castShadow>
           <capsuleGeometry args={[0.08, 0.5, 8, 16]} />
-          <meshStandardMaterial color={foxColor} />
+          <meshStandardMaterial 
+            color={isSelected ? '#ff7700' : foxColor}
+            emissive={isSelected ? '#440000' : '#000000'}
+            emissiveIntensity={isSelected ? 0.1 : 0}
+          />
         </mesh>
         
         {/* Tip of tail (white) */}

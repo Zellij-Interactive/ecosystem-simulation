@@ -7,13 +7,26 @@ import DayNightCycle from './DayNightCycle';
 import { useSimulationStore } from '../store/simulationStore';
 
 const Simulation: React.FC = () => {
-  const { showStats } = useSimulationStore();
+  const { showStats, setSelectedAnimal } = useSimulationStore();
+
+  // Handle canvas click to deselect animals
+  const handleCanvasClick = (event: any) => {
+    // Only deselect if clicking on the canvas itself, not on objects
+    if (event.eventObject === event.object) {
+      console.log('Canvas clicked - deselecting animal');
+      setSelectedAnimal(null);
+    }
+  };
 
   return (
     <Canvas
       shadows
       camera={{ position: [0, 10, 20], fov: 50 }}
       className="w-full h-full bg-gray-900"
+      onPointerMissed={() => {
+        console.log('Pointer missed - deselecting animal');
+        setSelectedAnimal(null);
+      }}
     >
       {showStats && <DreiStats className="stats" />}
       <fog attach="fog" args={['#e4e9be', 30, 100]} />
@@ -37,6 +50,9 @@ const Simulation: React.FC = () => {
         maxPolarAngle={Math.PI / 2.5} 
         minDistance={5} 
         maxDistance={50}
+        enablePan={true}
+        enableZoom={true}
+        enableRotate={true}
       />
     </Canvas>
   );

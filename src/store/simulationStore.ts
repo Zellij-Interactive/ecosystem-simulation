@@ -79,6 +79,7 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
   showGrid: true,
   worldSize: WORLD_SIZE,
   simulationTime: 0,
+  selectedAnimal: null,
   
   // Actions
   togglePause: () => set(state => ({ isPaused: !state.isPaused })),
@@ -88,6 +89,8 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
   toggleStats: () => set(state => ({ showStats: !state.showStats })),
   
   toggleGrid: () => set(state => ({ showGrid: !state.showGrid })),
+  
+  setSelectedAnimal: (animal) => set({ selectedAnimal: animal }),
   
   addRabbit: () => set(state => ({
     rabbits: [...state.rabbits, createRabbit(state.worldSize)]
@@ -128,16 +131,24 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
     const newRabbits = checkGenderBasedReproduction(updatedRabbits, state.worldSize, 'rabbit');
     const newFoxes = checkGenderBasedReproduction(updatedFoxes, state.worldSize, 'fox');
     
+    // Update selected animal if it still exists
+    const allAnimals = [...updatedRabbits, ...newRabbits, ...updatedFoxes, ...newFoxes];
+    const selectedAnimal = state.selectedAnimal 
+      ? allAnimals.find(animal => animal.id === state.selectedAnimal?.id) || null
+      : null;
+    
     set({
       rabbits: [...updatedRabbits, ...newRabbits],
-      foxes: [...updatedFoxes, ...newFoxes]
+      foxes: [...updatedFoxes, ...newFoxes],
+      selectedAnimal
     });
   },
   
   reset: () => set({
     rabbits: Array(INITIAL_RABBITS).fill(null).map(() => createRabbit(WORLD_SIZE)),
     foxes: Array(INITIAL_FOXES).fill(null).map(() => createFox(WORLD_SIZE)),
-    simulationTime: 0
+    simulationTime: 0,
+    selectedAnimal: null
   }),
 }));
 
@@ -245,8 +256,8 @@ const updateFox = (
   if (closestRabbit) {
     const distance = Math.sqrt(distanceSquared(updatedFox.position, closestRabbit.position));
     
-    if (distance < 8) { // Increased detection radius
-      // Move toward the rabbit
+    if (distance < 8) { // Detection radius
+      // Move toward the rabbit - HUNTING SPEED
       const towardVector = {
         x: closestRabbit.position.x - updatedFox.position.x,
         y: 0,
@@ -254,7 +265,7 @@ const updateFox = (
       };
       
       const normalized = normalizeVector(towardVector);
-      const huntSpeed = 2.5; // Increased hunting speed
+      const huntSpeed = 3.5; // INCREASED hunting speed (was 2.5)
       
       newVelocity = {
         x: normalized.x * huntSpeed,
@@ -263,24 +274,38 @@ const updateFox = (
       };
       
       // If close enough, eat the rabbit
-      if (distance < 1.2) { // Increased catch radius
+      if (distance < 1.2) { // Catch radius
         // Gain energy from eating and mark rabbit as eaten
         newEnergy = Math.min(100, updatedFox.energy + 60); // More energy from eating
         eatenRabbitId = closestRabbit.id;
       }
+    } else {
+      // No rabbit in detection range - use wandering speed
+      if (Math.random() < 0.04) {
+        const changeAngle = (Math.random() - 0.5) * Math.PI / 2;
+        const wanderSpeed = 1.8; // WANDERING SPEED (slower than hunting)
+        const currentAngle = Math.atan2(newVelocity.z, newVelocity.x);
+        const newAngle = currentAngle + changeAngle;
+        
+        newVelocity = {
+          x: Math.cos(newAngle) * wanderSpeed,
+          y: 0,
+          z: Math.sin(newAngle) * wanderSpeed,
+        };
+      }
     }
   } else {
-    // Random movement when no rabbits are detected
+    // No rabbits detected - random wandering movement
     if (Math.random() < 0.04) {
       const changeAngle = (Math.random() - 0.5) * Math.PI / 2;
-      const speed = Math.sqrt(newVelocity.x * newVelocity.x + newVelocity.z * newVelocity.z);
+      const wanderSpeed = 1.8; // WANDERING SPEED
       const currentAngle = Math.atan2(newVelocity.z, newVelocity.x);
       const newAngle = currentAngle + changeAngle;
       
       newVelocity = {
-        x: Math.cos(newAngle) * speed,
+        x: Math.cos(newAngle) * wanderSpeed,
         y: 0,
-        z: Math.sin(newAngle) * speed,
+        z: Math.sin(newAngle) * wanderSpeed,
       };
     }
   }

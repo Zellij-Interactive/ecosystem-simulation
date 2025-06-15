@@ -1,7 +1,8 @@
 import React, { useRef, useMemo } from 'react';
-import { useFrame } from '@react-three/fiber';
+import { useFrame, ThreeEvent } from '@react-three/fiber';
 import * as THREE from 'three';
 import { AgentType } from '../models/types';
+import { useSimulationStore } from '../store/simulationStore';
 
 interface RabbitProps {
   rabbit: AgentType;
@@ -11,6 +12,10 @@ interface RabbitProps {
 const Rabbit: React.FC<RabbitProps> = ({ rabbit, worldSize }) => {
   const rabbitRef = useRef<THREE.Group>(null);
   const energyBarRef = useRef<THREE.Mesh>(null);
+  const { setSelectedAnimal, selectedAnimal } = useSimulationStore();
+  
+  // Check if this rabbit is selected
+  const isSelected = selectedAnimal?.id === rabbit.id;
   
   // Energy bar scale based on current energy
   const energyBarScale = useMemo(() => {
@@ -24,6 +29,13 @@ const Rabbit: React.FC<RabbitProps> = ({ rabbit, worldSize }) => {
   // Color based on gender
   const rabbitColor = rabbit.gender === 'male' ? '#f0f0f0' : '#e8e8e8';
   const earColor = rabbit.gender === 'male' ? '#d8d8d8' : '#d0d0d0';
+
+  // Handle click to select animal
+  const handleClick = (event: ThreeEvent<MouseEvent>) => {
+    event.stopPropagation();
+    console.log('Rabbit clicked:', rabbit.id);
+    setSelectedAnimal(rabbit);
+  };
 
   // Update position and rotation for the rabbit model
   useFrame(() => {
@@ -62,8 +74,26 @@ const Rabbit: React.FC<RabbitProps> = ({ rabbit, worldSize }) => {
 
   return (
     <group ref={rabbitRef}>
+      {/* Selection indicator */}
+      {isSelected && (
+        <mesh position={[0, 0.05, 0]}>
+          <ringGeometry args={[0.8, 1.0, 32]} />
+          <meshBasicMaterial color="#00ff00" transparent opacity={0.6} />
+        </mesh>
+      )}
+      
+      {/* Clickable invisible sphere for better click detection */}
+      <mesh 
+        position={[0, 0.3, 0]} 
+        onClick={handleClick}
+        visible={false}
+      >
+        <sphereGeometry args={[0.6, 8, 8]} />
+        <meshBasicMaterial transparent opacity={0} />
+      </mesh>
+      
       {/* Rabbit body */}
-      <group>
+      <group onClick={handleClick}>
         {/* Body - slightly larger if pregnant */}
         <mesh castShadow receiveShadow>
           <capsuleGeometry args={[
@@ -71,13 +101,21 @@ const Rabbit: React.FC<RabbitProps> = ({ rabbit, worldSize }) => {
             rabbit.isPregnant ? 0.35 : 0.3, 
             8, 16
           ]} />
-          <meshStandardMaterial color={rabbitColor} />
+          <meshStandardMaterial 
+            color={isSelected ? '#ffffff' : rabbitColor}
+            emissive={isSelected ? '#004400' : '#000000'}
+            emissiveIntensity={isSelected ? 0.2 : 0}
+          />
         </mesh>
         
         {/* Head */}
         <mesh position={[0, 0.3, 0.2]} castShadow>
           <sphereGeometry args={[0.15, 16, 16]} />
-          <meshStandardMaterial color={rabbitColor} />
+          <meshStandardMaterial 
+            color={isSelected ? '#ffffff' : rabbitColor}
+            emissive={isSelected ? '#004400' : '#000000'}
+            emissiveIntensity={isSelected ? 0.2 : 0}
+          />
         </mesh>
         
         {/* Ears - different sizes for male/female */}
@@ -88,7 +126,11 @@ const Rabbit: React.FC<RabbitProps> = ({ rabbit, worldSize }) => {
               rabbit.gender === 'male' ? 0.28 : 0.25, 
               8, 8
             ]} />
-            <meshStandardMaterial color={earColor} />
+            <meshStandardMaterial 
+              color={isSelected ? '#f0f0f0' : earColor}
+              emissive={isSelected ? '#004400' : '#000000'}
+              emissiveIntensity={isSelected ? 0.1 : 0}
+            />
           </mesh>
           <mesh position={[0.08, 0.1, 0]} castShadow>
             <capsuleGeometry args={[
@@ -96,7 +138,11 @@ const Rabbit: React.FC<RabbitProps> = ({ rabbit, worldSize }) => {
               rabbit.gender === 'male' ? 0.28 : 0.25, 
               8, 8
             ]} />
-            <meshStandardMaterial color={earColor} />
+            <meshStandardMaterial 
+              color={isSelected ? '#f0f0f0' : earColor}
+              emissive={isSelected ? '#004400' : '#000000'}
+              emissiveIntensity={isSelected ? 0.1 : 0}
+            />
           </mesh>
         </group>
         

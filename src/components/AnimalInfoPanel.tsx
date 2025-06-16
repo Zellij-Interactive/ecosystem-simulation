@@ -62,25 +62,25 @@ const AnimalInfoPanel: React.FC = () => {
   const currentBehavior = getCurrentBehavior();
 
   return (
-    <div className="fixed top-4 right-4 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+    <div className="w-80 bg-black bg-opacity-40 backdrop-blur-md rounded-lg border border-gray-600 text-white">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-100">
+      <div className="flex items-center justify-between p-4 border-b border-gray-600">
         <div className="flex items-center space-x-2">
           <span className="text-2xl">
             {selectedAnimal.type === 'rabbit' ? '🐰' : '🦊'}
           </span>
           <div>
-            <h3 className="font-semibold text-gray-800 capitalize">
+            <h3 className="font-semibold text-white capitalize">
               {selectedAnimal.type}
             </h3>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-300">
               {selectedAnimal.gender === 'male' ? 'Male ♂️' : 'Female ♀️'}
             </p>
           </div>
         </div>
         <button
           onClick={() => setSelectedAnimal(null)}
-          className="p-1 hover:bg-gray-100 rounded-full text-gray-400 hover:text-gray-600"
+          className="p-1 hover:bg-gray-700 rounded-full text-gray-400 hover:text-white transition-colors"
         >
           <X size={18} />
         </button>
@@ -90,11 +90,11 @@ const AnimalInfoPanel: React.FC = () => {
       <div className="p-4 space-y-4">
         {/* Energy */}
         <div>
-          <div className="flex justify-between text-sm text-gray-600 mb-2">
+          <div className="flex justify-between text-sm text-gray-300 mb-2">
             <span>Energy</span>
             <span>{selectedAnimal.energy.toFixed(0)}%</span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
+          <div className="w-full bg-gray-700 rounded-full h-2">
             <div
               className={`h-2 rounded-full ${getEnergyColor(selectedAnimal.energy)}`}
               style={{ width: `${Math.max(0, selectedAnimal.energy)}%` }}
@@ -105,12 +105,12 @@ const AnimalInfoPanel: React.FC = () => {
         {/* Basic Stats */}
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div>
-            <span className="text-gray-500">Age</span>
-            <p className="font-medium text-gray-800">{formatAge(selectedAnimal.age)}</p>
+            <span className="text-gray-400">Age</span>
+            <p className="font-medium text-white">{formatAge(selectedAnimal.age)}</p>
           </div>
           <div>
-            <span className="text-gray-500">Behavior</span>
-            <p className="font-medium text-gray-800">
+            <span className="text-gray-400">Behavior</span>
+            <p className="font-medium text-white">
               {currentBehavior}
             </p>
           </div>
@@ -118,16 +118,16 @@ const AnimalInfoPanel: React.FC = () => {
 
         {/* Position */}
         <div>
-          <span className="text-gray-500 text-sm">Position</span>
-          <p className="font-medium text-gray-800 text-sm">
+          <span className="text-gray-400 text-sm">Position</span>
+          <p className="font-medium text-white text-sm">
             ({selectedAnimal.position.x.toFixed(1)}, {selectedAnimal.position.z.toFixed(1)})
           </p>
         </div>
 
         {/* Speed */}
         <div>
-          <span className="text-gray-500 text-sm">Speed</span>
-          <p className="font-medium text-gray-800 text-sm">
+          <span className="text-gray-400 text-sm">Speed</span>
+          <p className="font-medium text-white text-sm">
             {Math.sqrt(
               selectedAnimal.velocity.x ** 2 + selectedAnimal.velocity.z ** 2
             ).toFixed(1)} units/s
@@ -136,12 +136,12 @@ const AnimalInfoPanel: React.FC = () => {
 
         {/* Pregnancy Info */}
         {selectedAnimal.isPregnant && (
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+          <div className="bg-yellow-900 bg-opacity-50 border border-yellow-600 rounded-lg p-3">
             <div className="flex items-center space-x-2">
-              <span className="text-yellow-600">🤱</span>
+              <span className="text-yellow-400">🤱</span>
               <div>
-                <p className="text-sm font-medium text-yellow-800">Expecting</p>
-                <p className="text-xs text-yellow-600">
+                <p className="text-sm font-medium text-yellow-200">Expecting</p>
+                <p className="text-xs text-yellow-300">
                   {selectedAnimal.pregnancyTime ? 
                     `${(selectedAnimal.pregnancyTime).toFixed(1)}s pregnant` : 
                     'Just became pregnant'

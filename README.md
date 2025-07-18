@@ -28,7 +28,7 @@ Department of Technology, Applied Computer Science
 
 **Developers:** Walid Beladddad and Karim Ouhammi
 
-Demo: _to be added later on_
+Demo: https://www.youtube.com/watch?v=EcAD3--cNTo
 
 ---
 

@@ -10,6 +10,16 @@ The project demonstrates core concepts of **3D graphics**, **movement**, **agent
 
 ---
 
+## Features
+
+- Rabbits wander the environment and reproduce.
+- Foxes hunt and consume rabbits to gain energy.
+- Agents have an energy-based lifecycle (reproduction, starvation, death).
+- Dynamic simulation on a 3D terrain.
+- Stable performance with increasing population.
+
+---
+
 ## Technologies
 
 - Three.js (JavaScript/WebGL)
@@ -21,23 +31,14 @@ The project demonstrates core concepts of **3D graphics**, **movement**, **agent
 
 ## Academic Context
 
-**University of Applied Sciences Mainz**  
-Department of Technology, Applied Computer Science
+- University of Applied Sciences Mainz
 
-**Supervisors:** Prof. Dr.-Ing. Klaus Böhm and Fabian Püschel
+- Department of Technology, Applied Computer Science
 
-**Developers:** Walid Beladddad and Karim Ouhammi
+- **Supervisors:** Prof. Dr.-Ing. Klaus Böhm and Fabian Püschel
 
-Demo: https://www.youtube.com/watch?v=EcAD3--cNTo
+- **Developers:** Walid Beladddad and Karim Ouhammi
 
----
-
-## Features
-
-- Rabbits wander the environment and reproduce.
-- Foxes hunt and consume rabbits to gain energy.
-- Agents have an energy-based lifecycle (reproduction, starvation, death).
-- Dynamic simulation on a 3D terrain.
-- Stable performance with increasing population.
+- **Demo:** https://www.youtube.com/watch?v=EcAD3--cNTo
 
 ---
